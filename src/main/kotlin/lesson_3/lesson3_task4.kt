@@ -12,4 +12,4 @@ fun main() {
     printMoves(begin, end, moveNumber)
 }
 
-fun printMoves(begin: String, end: String, moveNumber: Int) = println("$begin-$end; $moveNumber")
+fun printMoves(begin: String, end: String, moveNumber: Int) = println("$begin-$end;$moveNumber")
