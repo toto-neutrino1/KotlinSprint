@@ -1,14 +1,15 @@
 package lesson_3
 
+// Split string using multiple delimiters:
+// https://stackoverflow.com/questions/46038476/how-could-i-split-a-string-into-an-array-in-kotlin
+
 fun main() {
     val outputString = "D2-D4;0"
 
-    val indexOfDash = outputString.indexOf('-')
-    //val indexOfSemicolon = outputString.indexOf(';')
-
-    val begin = outputString.take(2)
-    val end = outputString.slice(indexOfDash + 1..indexOfDash + 2)
-    val moveNumber = outputString.substringAfter(';')
+    val chessMoveData = outputString.split(";", "-")
+    val begin = chessMoveData[0]
+    val end = chessMoveData[1]
+    val moveNumber = chessMoveData[2]
 
     println("$begin \n$end \n$moveNumber")
 }
