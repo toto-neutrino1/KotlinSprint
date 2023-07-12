@@ -1,16 +1,18 @@
 package lesson_4
 
-const val GOOD_WEATHER = "солнечная"
-const val AWNING = "открыт"
+const val IS_SUNNY = true
+const val IS_AWNING_OPEN = true
 const val HUMIDITY = 20
 const val BAD_SEASON = "зима"
+
 fun main() {
-    val isGoodWeather = "солнечная" == GOOD_WEATHER // по условию тип boolean должен быть
-    val isGoodAwning = "открыт" == AWNING // по условию тип boolean должен быть
+    val isSunny = true
+    val isAwningOpen = true
     val humidity = 20
     val season = "зима"
 
-    val areGoodConditions = isGoodWeather && isGoodAwning && (humidity == HUMIDITY) && (season != BAD_SEASON)
+    val areGoodConditions = (isSunny == IS_SUNNY) && (isAwningOpen == IS_AWNING_OPEN) &&
+                            (humidity == HUMIDITY) && (season != BAD_SEASON)
 
     println("Благоприятные ли условия сейчас для роста бобовых? $areGoodConditions")
 }
