@@ -1,8 +1,9 @@
 package lesson_5
 
+const val USER = "Zaphod"
+const val PASSWORD = "PanGalactic"
+
 fun main() {
-    val user = "Zaphod"
-    val password = "PanGalactic"
 
     val welcomeMessage = """
         Внимание, пассажир. 
@@ -14,7 +15,7 @@ fun main() {
 
     val finalMessage = """
         Ваши данные проверены, и о, чудо, они верны... 
-        Пользователь $user, вам разрешено входить на борт корабля "Heart of Gold". 
+        Пользователь $USER, вам разрешено входить на борт корабля "Heart of Gold". 
         Хотя мне всё равно... 
         Ну вперед, войдите... 
         Если вам так уж надо, в конце концов... 
@@ -25,9 +26,9 @@ fun main() {
 
     val name = readln()
 
-    if (name == user) {
+    if (name == USER) {
         println("Введите пароль:")
-        if (readln() == password) println(finalMessage)
+        if (readln() == PASSWORD) println(finalMessage)
         else println("Неверный пароль")
     } else {
         println("Зарегистрируйтесь на сайте")
