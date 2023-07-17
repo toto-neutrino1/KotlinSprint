@@ -4,7 +4,7 @@ import kotlin.random.Random
 
 fun main() {
 
-    val number1 = Random.nextInt(1, 101)
+    val number1 = Random.nextInt(1, 101) // (1..100).random() - ещё один способ
     val number2 = Random.nextInt(1, 101)
 
     println("Угадайте 2 числа от 1 до 100\n")
