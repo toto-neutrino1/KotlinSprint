@@ -15,7 +15,7 @@ fun main() {
         println("Чему равно $num1 + $num2? \nВаш ответ:")
         userNum = readln().toInt()
 
-        if (userNum == num1 + num2) {
+        if (userNum == listOf(num1, num2).sum()) {
             println("Добро пожаловать!")
             return
         }
