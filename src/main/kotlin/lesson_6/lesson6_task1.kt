@@ -11,18 +11,18 @@ fun main() {
     var isRightLogin = false
     var isRightPassword = false
 
-    while (!isRightLogin) {
+    while (!isRightLogin || !isRightPassword) {
         println("\nВведите логин:")
         if (readln() != userLogin) println("Такого логина нет в системе")
-        else isRightLogin = true
-    }
-
-    while (!isRightPassword) {
-        println("\nВведите ваш пароль:")
-        if (readln() != userPassword) println("Пароль неверный")
         else {
-            println("Авторизация прошла успешно")
-            isRightPassword = true
+            isRightLogin = true
+
+            println("\nВведите ваш пароль:")
+            if (readln() != userPassword) println("Пароль неверный")
+            else {
+                println("Авторизация прошла успешно")
+                isRightPassword = true
+            }
         }
     }
 }
