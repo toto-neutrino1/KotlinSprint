@@ -20,8 +20,10 @@ fun main() {
 }
 
 fun printErrorMessage(numOfAttempts: Int) {
-    val str1 = "Неверно. Осталось ${numOfAttempts - 1}"
-    val str2 = when (numOfAttempts - 1) {
+    var attempts = numOfAttempts
+    attempts--
+    val str1 = "Неверно. Осталось $attempts"
+    val str2 = when (attempts) {
         in 2..4 -> "попытки"
         0 -> "попыток"
         else -> "попытка"
