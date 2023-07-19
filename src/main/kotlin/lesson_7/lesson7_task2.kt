@@ -5,21 +5,21 @@ fun main() {
     var code: Int
     var userInput: Int
 
-    var counter = 0
+    code = numbers.random()
+    println("Ваш код авторизации: $code")
 
-    while (counter < 100) {
+    println("Введите код авторизации:")
+    userInput = readln().toInt()
+    println()
+
+    while (userInput != code) {
         code = numbers.random()
         println("Ваш код авторизации: $code")
 
         println("Введите код авторизации:")
         userInput = readln().toInt()
         println()
-
-        if (userInput == code) {
-            println("Добро пожаловать!")
-            return
-        }
-
-        counter++
     }
+
+    println("Добро пожаловать!")
 }
