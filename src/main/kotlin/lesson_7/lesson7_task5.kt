@@ -9,18 +9,13 @@ fun main() {
 }
 
 fun generatePassword(passwordLen: Int): String {
-    val digits = 0..9
-    val lowerLetters = 'a'..'z'
-    val upperLetters = 'A'..'Z'
-
-    val password: MutableList<String> = mutableListOf()
+    val symbols = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+    var password = ""
 
     for (i in 1..passwordLen) {
-        if ((1..2).random() == 1) password.add("${digits.random()}")
-        else {
-            if ((1..2).random() == 1) password.add("${lowerLetters.random()}")
-            else password.add("${upperLetters.random()}")
-        }
+        password += "${symbols.random()}"
     }
-    return password.joinToString(separator = "")
+    return password
 }
+
+//20000000
