@@ -4,7 +4,7 @@ fun main() {
     val ingredients = arrayOf("соль", "сахар", "мука", "яйцо", "ванилин", "яблоко")
 
     println("Какой ингредиент вы хотите найти? \nВведите название в единственном числе:")
-    val userIngredient = readln()
+    val userIngredient = readln().lowercase()
 
     for (elem in ingredients) {
         if (userIngredient == elem) {
