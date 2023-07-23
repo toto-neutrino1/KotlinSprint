@@ -11,7 +11,7 @@ fun main() {
 
 fun generatePassword(len: Int): String {
     val numbers = '0'..'9'
-    val specSymbols = 32.toChar()..47.toChar()
+    val specSymbols = (32..47).map { it.toChar() }
 
     val password = StringBuilder()
 
