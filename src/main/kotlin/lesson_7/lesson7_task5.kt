@@ -10,12 +10,10 @@ fun main() {
 
 fun generatePassword(passwordLen: Int): String {
     val symbols = ('a'..'z') + ('A'..'Z') + ('0'..'9')
-    var password = ""
+    val password = StringBuilder()
 
     for (i in 1..passwordLen) {
-        password += "${symbols.random()}"
+        password.append("${symbols.random()}")
     }
-    return password
+    return password.toString()
 }
-
-//20000000
