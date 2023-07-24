@@ -53,7 +53,7 @@ fun authorization(userData: List<String>) {
 
 fun checkLogin(login: String) = login.length >= 4
 
-fun generatePassword(length: Int): String {
+private fun generatePassword(length: Int): String {
     val symbols = ('0'..'9') + ('a'..'z') + ('A'..'Z') + (32.toChar()..47.toChar())
     val password = StringBuilder()
 

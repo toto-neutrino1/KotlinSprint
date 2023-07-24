@@ -14,4 +14,4 @@ fun main() {
     )
 }
 
-fun rollDice() = List(2) { (1..6).random() }
+private fun rollDice() = List(2) { (1..6).random() }

@@ -9,7 +9,7 @@ fun main() {
     println("\nПароль:\n$userPassword")
 }
 
-fun generatePassword(len: Int): String {
+private fun generatePassword(len: Int): String {
     val numbers = '0'..'9'
     val specSymbols = (32..47).map { it.toChar() }
 

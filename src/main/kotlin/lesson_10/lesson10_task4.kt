@@ -17,7 +17,7 @@ fun main() {
     println("\nПользователь выиграл $userWins партий")
 }
 
-fun rollDice() = List(2) { (1..6).random() }
+private fun rollDice() = List(2) { (1..6).random() }
 
 fun isUserWins(): Boolean {
     val userRoll = rollDice()
