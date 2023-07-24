@@ -9,6 +9,7 @@ fun main() {
     forum1.createNewMessage(authorId = 2, message = "Приветствую!")
     forum1.createNewMessage(authorId = 2, message = "Какие дальнейшие планы?")
     forum1.createNewMessage(authorId = 1, message = "Учимся, изучаем Kotlin, переходим к Android")
+    forum1.createNewUser(userLogin = "first", userPassword = "", userEmail = "")
 
     forum1.printThread()
 }
@@ -22,7 +23,7 @@ class Forum(
 
     fun createNewUser(userLogin: String, userPassword: String, userEmail: String) {
 
-        if (userLogin in logins) println("Такой логин уже существует.")
+        if (userLogin in logins) println("Логин $userLogin уже существует.\n")
 
         else {
             val newUser = User(
