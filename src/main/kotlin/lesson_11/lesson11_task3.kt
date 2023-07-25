@@ -4,7 +4,7 @@ fun main() {
     val room1 = Room(
         cover = "Мяч",
         name = "Спорт",
-        members = listOf(
+        members = mutableListOf(
             Member("@user1"),
             Member("@user2", "разговаривает"),
             Member("@user3", "пользователь заглушен"),
@@ -18,7 +18,7 @@ fun main() {
     val room2 = Room(
         cover = "Ноутбук",
         name = "IT",
-        members = listOf(
+        members = mutableListOf(
             Member("@user5"),
             Member("@user6"),
             Member("@user7"),
@@ -35,14 +35,13 @@ fun main() {
 private class Room(
     val cover: String,
     val name: String,
-    val members: List<Member>,
+    val members: MutableList<Member>,
 ) {
     fun printRoomInfo() {
-        println("Room \"$name\" info: \ncover = $cover")
+        println("\nRoom \"$name\" info: \ncover = $cover")
         for (member in members) {
             member.printMemberData()
         }
-        println()
     }
 }
 
@@ -51,18 +50,17 @@ private class Member(
     private var status: String = "микрофон выключен"
 ) {
 
-    fun longClick() = println("$nickName\n")
+    fun longClick() = println(nickName)
+
     fun printMemberData() = println("$nickName - $status")
 
     fun sayStatus() {
         status = "разговаривает"
     }
 
-
     fun turnOffMicrophone() {
         status = "микрофон выключен"
     }
-
 
     fun muteUser() {
         status = "пользователь заглушен"
