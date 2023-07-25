@@ -2,9 +2,9 @@ package lesson_11
 
 fun main() {
     val closePeople = mutableListOf(
-        listOf("жена", "userName"),
-        listOf("подруга", "userName"),
-        listOf("подруга", "userName")
+        ClosePerson("жена", "userName"),
+        ClosePerson("подруга", "userName"),
+        ClosePerson("подруга", "userName")
     )
 
     val testContact = Contact(
@@ -18,22 +18,13 @@ fun main() {
 }
 
 class Contact(
-    val mainIcon: String = "",
     val name: String,
     val surname: String,
-    val messageIcon: String = "", val message: String = "написать",
-    val callIcon: String = "", val call: String = "вызов",
-    val videoIcon: String = "", val video: String = "видео",
-    val emailIcon: String = "", val email: String = "почта",
     val mobilePhone: String,
     val homePhone: String,
-    val faceTime: String = "FaceTime",
-    val faceTimeVideoIcon: String = "",
-    val faceTimeCallIcon: String = "",
     val iCloud: String,
-    private val closePeople: MutableList<List<String>> = mutableListOf(),
+    private val closePeople: MutableList<ClosePerson> = mutableListOf(),
 ) {
-
     fun clickSendMessage() = println("Сообщение...")
 
     fun clickCall() = println("Звонок...")
@@ -51,6 +42,11 @@ class Contact(
         val name = readln()
         println("Введите ник человека:")
         val nick = readln()
-        closePeople.add(listOf(name, nick))
+        closePeople.add(ClosePerson(name, nick))
     }
 }
+
+class ClosePerson(
+    val name: String,
+    val nick: String
+)
