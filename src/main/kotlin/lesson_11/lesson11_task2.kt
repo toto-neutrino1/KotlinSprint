@@ -60,5 +60,4 @@ private class User(
     fun sendLetter(message: String) {
         println("Здравствуйте, $login! Вам пришло сообщение: \n$message")
     }
-
 }

@@ -15,7 +15,7 @@ fun main() {
 }
 
 class Forum(
-    private val users: MutableList<User> = mutableListOf(),
+    private val users: MutableList<User5> = mutableListOf(),
     private val messages: MutableList<String> = mutableListOf(),
 ) {
 
@@ -26,14 +26,14 @@ class Forum(
         if (userLogin in logins) println("Логин $userLogin уже существует.\n")
 
         else {
-            val newUser = User(
+            val newUser5 = User5(
                 id = users.size + 1,
                 login = userLogin,
                 password = userPassword,
                 email = userEmail
             )
 
-            users.add(newUser)
+            users.add(newUser5)
             logins.add(userLogin)
         }
     }
@@ -46,7 +46,7 @@ class Forum(
     fun printThread() = println(messages.joinToString(separator = "\n"))
 }
 
-class User(
+class User5(
     val id: Int,
     val login: String,
     private var password: String,
