@@ -20,22 +20,7 @@ fun main() {
         )
     }
 
-    var sumDayTemp = 0
-    var sumNightTemp = 0
-    var sumPressure = 0.0
-    var numOfRainingDays = 0
-
-    weathers.forEach {
-        sumDayTemp += it.dayTemperature
-        sumNightTemp += it.nightTemperature
-        sumPressure += it.atmPressure
-
-        if (it.wasItRaining) numOfRainingDays++
-    }
-
-    printMeans(sumDayTemp, sumNightTemp, sumPressure, numOfRainingDays, weathers.size)
-
-
+    printMeans(weathers)
 }
 
 class WeatherTracker5(
@@ -51,19 +36,14 @@ class WeatherTracker5(
     }
 }
 
-fun printMeans(
-    sumDayTemp: Int,
-    sumNightTemp: Int,
-    sumPressure: Double,
-    numOfRainingDays: Int,
-    numOfDays: Int
-) {
-    val meanDayTemp = sumDayTemp / numOfDays.toDouble()
-    val meanNightTemp = sumNightTemp / numOfDays.toDouble()
-    val meanPressure = "%.3f".format(locale = Locale.US,sumPressure / numOfDays)
+fun printMeans(weathers: MutableList<WeatherTracker5>) {
+    val meanDayTemp = "%.2f".format(locale = Locale.US, weathers.map { it.dayTemperature }.average())
+    val meanNightTemp = "%.2f".format(locale = Locale.US,weathers.map { it.nightTemperature }.average())
+    val meanPressures = "%.3f".format(locale = Locale.US,weathers.map { it.atmPressure}.average())
+    val numOfRainingDays = weathers.count { it.wasItRaining }
 
-    println("\nMean values over $numOfDays days")
+    println("\nMean values over ${weathers.size} days")
     println("Mean day temp = $meanDayTemp C \nMean night temp = $meanNightTemp C")
-    println("Mean atm. pressure = $meanPressure atm.")
+    println("Mean atm. pressure = $meanPressures atm.")
     println("Num of raining days = $numOfRainingDays")
 }
