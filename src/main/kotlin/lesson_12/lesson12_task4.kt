@@ -1,12 +1,12 @@
 package lesson_12
 
 fun main() {
-    val weather1 = WeatherTracker2(40, 28, atmPressure = 0.98)
-    val weather2 = WeatherTracker2(30, 20, true, 1.1)
-    val weather3 = WeatherTracker2(5, -5, atmPressure = 1.0)
+    val weather1 = WeatherTracker4(40, 28, atmPressure = 0.98)
+    val weather2 = WeatherTracker4(30, 20, true, 1.1)
+    val weather3 = WeatherTracker4(5, -5, atmPressure = 1.0)
 }
 
-class WeatherTracker2(
+class WeatherTracker4(
     var dayTemperature: Int,
     var nightTemperature: Int,
     var wasItRaining: Boolean = false,
