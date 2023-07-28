@@ -4,6 +4,10 @@ import java.util.*
 import kotlin.math.PI
 import kotlin.math.pow
 
+const val TRIANGLE = "Треугольник"
+const val RECTANGLE = "Прямоугольник"
+const val CIRCLE = "Круг"
+
 fun main() {
     val circle1 = Circle("Красный", 1.0)
     val circle2 = Circle("Черный", 0.35)
@@ -19,13 +23,12 @@ fun main() {
     val redSquares = "%.2f".format(locale = Locale.US, sumSquaresOfRedFigures(figures))
 
     println("Периметр всех красных фигур: $redPerimeters \nПлощадь всех красных фигур: $redSquares")
-
 }
 
 class Circle(
     color: String,
     val radius: Double
-) : Figure(color) {
+) : Figure(color, CIRCLE) {
 
     override fun getSquare(): Double = PI * radius.pow(2)
 
@@ -36,7 +39,7 @@ class Rectangle(
     color: String,
     val length: Double,
     val width: Double
-) : Figure(color) {
+) : Figure(color, RECTANGLE) {
 
     override fun getSquare(): Double = length * width
 
@@ -48,7 +51,7 @@ class Triangle(
     val len1: Double,
     val len2: Double,
     val len3: Double,
-) : Figure(color) {
+) : Figure(color, TRIANGLE) {
 
     override fun getSquare(): Double {
         val p = getPerimeter() / 2
@@ -58,7 +61,7 @@ class Triangle(
     override fun getPerimeter(): Double = len1 + len2 + len3
 }
 
-abstract class Figure(val color: String) {
+abstract class Figure(val color: String, val name: String) {
 
     abstract fun getSquare(): Double
 
