@@ -5,42 +5,42 @@ fun main() {
     val seagull = SeagullBird()
     val duck = Duck()
 
-    carp.canSwim()
-    seagull.canFly()
-    duck.canFly()
-    duck.canSwim()
+    carp.toSwim()
+    seagull.toFly()
+    duck.toFly()
+    duck.toSwim()
 }
 
 class CrucianCarp() : Swimming {
-    override fun canSwim() {
+    override fun toSwim() {
         print("Карась ")
-        super.canSwim()
+        super.toSwim()
     }
 }
 
 class SeagullBird() : Flying {
-    override fun canFly() {
+    override fun toFly() {
         print("Чайка ")
-        super.canFly()
+        super.toFly()
     }
 }
 
 class Duck() : Flying, Swimming {
-    override fun canFly() {
+    override fun toFly() {
         print("Утка ")
-        super.canFly()
+        super.toFly()
     }
 
-    override fun canSwim() {
+    override fun toSwim() {
         print("Утка ")
-        super.canSwim()
+        super.toSwim()
     }
 }
 
 interface Flying {
-    fun canFly() = println("умеет летать")
+    fun toFly() = println("умеет летать")
 }
 
 interface Swimming {
-    fun canSwim() = println("умеет плавать")
+    fun toSwim() = println("умеет плавать")
 }
