@@ -1,20 +1,20 @@
 package lesson_15
 
 fun main() {
-    val car = Car()
+    val car = Car(numOfPassengers = 3)
     car.move()
     car.transportPassengers()
 
-    val freightCar = FreightCar()
+    val freightCar = FreightCar(numOfPassengers = 1, numOfGoods = 2)
     freightCar.move()
     freightCar.transportGoods()
     freightCar.transportPassengers()
 }
 
 class FreightCar(
-    override val numOfPassengers: Int = 1,
+    override val numOfPassengers: Int,
     override val name: String = "грузовой",
-    val numOfGoods: Int = 2
+    val numOfGoods: Int
 ) : AnyCar(), TransportationOfGoods {
 
     override fun transportGoods() {
@@ -24,7 +24,7 @@ class FreightCar(
 }
 
 class Car(
-    override val numOfPassengers: Int = 3,
+    override val numOfPassengers: Int,
     override val name: String = "легковой"
 ) : AnyCar()
 
