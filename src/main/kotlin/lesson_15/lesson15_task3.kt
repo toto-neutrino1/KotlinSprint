@@ -3,34 +3,26 @@ package lesson_15
 fun main() {
     val admins = MutableList(3) { Admin("admin${it + 1}") }
     val users = MutableList(5) { User("user${it + 1}") }
-
-    val forum = Forum(admins, users)
-    forum.admins[2].writeMessage("Добро пожаловать на форум!", forum.messages)
-    forum.users[1].writeMessage("Привет!", forum.messages)
-    forum.users[0].writeMessage("Какие планы?", forum.messages)
-    forum.admins[1].writeMessage("Учимся!", forum.messages)
-    forum.readMessages()
-
-    forum.admins[0].deleteMessage("user2: Привет!", forum.messages)
-    forum.readMessages()
-    forum.printUsers()
-
-    forum.admins[2].deleteUser("user1", forum.users)
-    forum.printUsers()
-    forum.printAdmins()
-}
-
-class Forum(
-    val admins: MutableList<Admin>,
-    val users: MutableList<User> = mutableListOf(),
     val messages: MutableList<String> = mutableListOf()
-) {
-    fun readMessages() = admins[0].readMessages(messages)
 
-    fun printUsers() = println("\nUsers: ${users.joinToString(separator = ", ") { it.user }}")
+    admins[2].writeMessage("Добро пожаловать на форум!", messages)
+    users[1].writeMessage("Привет!", messages)
+    users[0].writeMessage("Какие планы?", messages)
+    admins[1].writeMessage("Учимся!", messages)
+    admins[0].readMessages(messages)
 
-    fun printAdmins() = println("Admins: ${admins.joinToString(separator = ", ") { it.user }}")
+    admins[0].deleteMessage("user2: Привет!", messages)
+    admins[0].readMessages(messages)
+    printUsers(users)
+
+    admins[2].deleteUser("user1", users)
+    printUsers(users)
+    printAdmins(admins)
 }
+
+fun printUsers(users: MutableList<User>) = println("\nUsers: ${users.joinToString(separator = ", ") { it.user }}")
+
+fun printAdmins(admins: MutableList<Admin>) = println("Admins: ${admins.joinToString(separator = ", ") { it.user }}")
 
 class Admin(admin: String) : User(admin) {
     fun deleteMessage(message: String, messages: MutableList<String>) {
