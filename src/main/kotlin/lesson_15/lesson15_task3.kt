@@ -22,9 +22,13 @@ fun main() {
 
 fun printUsers(users: MutableList<User>) = println("\nUsers: ${users.joinToString(separator = ", ") { it.user }}")
 
-fun printAdmins(admins: MutableList<Admin>) = println("Admins: ${admins.joinToString(separator = ", ") { it.user }}")
+fun printAdmins(admins: MutableList<Admin>) = println("Admins: ${admins.joinToString(separator = ", ") { it.admin }}")
 
-class Admin(admin: String) : User(admin) {
+class Admin(val admin: String) : BasicUser() {
+    override fun writeMessage(message: String, messages: MutableList<String>) {
+        messages.add("$admin: $message")
+    }
+
     fun deleteMessage(message: String, messages: MutableList<String>) {
         messages.remove(message)
     }
@@ -34,7 +38,7 @@ class Admin(admin: String) : User(admin) {
     }
 }
 
-open class User(val user: String) : BasicUser() {
+class User(val user: String) : BasicUser() {
     override fun writeMessage(message: String, messages: MutableList<String>) {
         messages.add("$user: $message")
     }
