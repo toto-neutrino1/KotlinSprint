@@ -1,50 +1,75 @@
 package lesson_15
 
 fun main() {
-    val admins = MutableList(3) { Admin("admin${it + 1}") }
-    val users = MutableList(5) { User("user${it + 1}") }
-    val messages: MutableList<String> = mutableListOf()
+    val admins = MutableList(3) { Admin(it + 1, "admin${it + 1}") }
+    val users = MutableList(5) { User(it + 4, "user${it + 1}") }
 
-    admins[2].writeMessage("Добро пожаловать на форум!", messages)
-    users[1].writeMessage("Привет!", messages)
-    users[0].writeMessage("Какие планы?", messages)
-    admins[1].writeMessage("Учимся!", messages)
-    admins[0].readMessages(messages)
+    val forum = Forum()
+    forum.users.addAll(admins)
+    forum.users.addAll(users)
 
-    admins[0].deleteMessage("user2: Привет!", messages)
-    admins[0].readMessages(messages)
-    printUsers(users)
+    forum.users[2].writeMessage("Добро пожаловать на форум!", forum.messages)
+    forum.users[5].writeMessage("Привет!", forum.messages)
+    forum.users[4].writeMessage("Какие планы?", forum.messages)
+    forum.users[1].writeMessage("Учимся!", forum.messages)
+    forum.readMessages()
 
-    admins[2].deleteUser("user1", users)
-    printUsers(users)
-    printAdmins(admins)
+    forum.deleteMessage(userId = 2, messageId = 3)
+    forum.readMessages()
+    forum.printUsers()
+
+    forum.deleteUser(userId = 5, deletingUserId = 6)
+    forum.deleteUser(userId = 3, deletingUserId = 6)
+    forum.printUsers()
+    forum.printAdmins()
 }
 
-fun printUsers(users: MutableList<User>) = println("\nUsers: ${users.joinToString(separator = ", ") { it.user }}")
+class Forum(
+    val users: MutableList<BasicUser> = mutableListOf(),
+    val messages: MutableList<String> = mutableListOf()
+) {
+    fun readMessages() = users[0].readMessages(messages)
 
-fun printAdmins(admins: MutableList<Admin>) = println("Admins: ${admins.joinToString(separator = ", ") { it.admin }}")
+    fun deleteMessage(userId: Int, messageId: Int) {
+        if (userId in 1..users.size &&
+            messageId in 1..messages.size &&
+            users[userId - 1] is Admin) {
+            messages.removeAt(messageId - 1)
+        } else println("Попытка удаления сообщения с id = $messageId пользователем с id = $userId неудачна!\n")
+    }
 
-class Admin(val admin: String) : BasicUser() {
+    fun deleteUser(userId: Int, deletingUserId: Int) {
+        if (userId in 1..users.size &&
+            deletingUserId in 1..users.size &&
+            users[userId - 1] is Admin) {
+            users.removeIf { it.id == deletingUserId }
+        } else println("Попытка удаления пользователя с id = $deletingUserId пользователем с id = $userId неудачна!\n")
+    }
+
+    fun printUsers() = println("\nUsers: ${users.filterIsInstance<User>().joinToString(separator = ", ") { it.user }}")
+
+    fun printAdmins() = println("Admins: ${users.filterIsInstance<Admin>().joinToString(separator = ", ") { it.admin }}")
+}
+
+class Admin(
+    id: Int,
+    val admin: String
+) : BasicUser(id) {
     override fun writeMessage(message: String, messages: MutableList<String>) {
         messages.add("$admin: $message")
     }
-
-    fun deleteMessage(message: String, messages: MutableList<String>) {
-        messages.remove(message)
-    }
-
-    fun deleteUser(user: String, users: MutableList<User>) {
-        users.removeIf { it.user == user }
-    }
 }
 
-class User(val user: String) : BasicUser() {
+class User(
+    id: Int,
+    val user: String
+) : BasicUser(id) {
     override fun writeMessage(message: String, messages: MutableList<String>) {
         messages.add("$user: $message")
     }
 }
 
-abstract class BasicUser {
+abstract class BasicUser(val id: Int) {
     fun readMessages(messages: MutableList<String>) = println(messages.joinToString(separator = "\n", postfix = "\n"))
     abstract fun writeMessage(message: String, messages: MutableList<String>)
 }
