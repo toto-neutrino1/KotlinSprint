@@ -21,7 +21,7 @@ class Screen {
         println("Нарисовали объект \"${figure.name}\" площадью ${figure.getArea()} в позиции ($x; $y)\n")
 }
 
-open class Figure(val name: String) {
+abstract class Figure(val name: String) {
     open fun getArea() = "0.0001"
 }
 
