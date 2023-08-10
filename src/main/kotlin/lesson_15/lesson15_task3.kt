@@ -30,20 +30,28 @@ class Forum(
 ) {
     fun readMessages() = users[0].readMessages(messages)
 
-    fun deleteMessage(userId: Int, messageId: Int) {
-        if (userId in 1..users.size &&
+    fun deleteMessage(userId: Int, messageId: Int): Boolean {
+        return if (userId in 1..users.size &&
             messageId in 1..messages.size &&
             users[userId - 1] is Admin) {
             messages.removeAt(messageId - 1)
-        } else println("Попытка удаления сообщения с id = $messageId пользователем с id = $userId неудачна!\n")
+            true
+        } else {
+            println("Попытка удаления сообщения с id = $messageId пользователем с id = $userId неудачна!\n")
+            false
+        }
     }
 
-    fun deleteUser(userId: Int, deletingUserId: Int) {
-        if (userId in 1..users.size &&
+    fun deleteUser(userId: Int, deletingUserId: Int): Boolean {
+        return if (userId in 1..users.size &&
             deletingUserId in 1..users.size &&
             users[userId - 1] is Admin) {
             users.removeIf { it.id == deletingUserId }
-        } else println("Попытка удаления пользователя с id = $deletingUserId пользователем с id = $userId неудачна!\n")
+            true
+        } else {
+            println("Попытка удаления пользователя с id = $deletingUserId пользователем с id = $userId неудачна!\n")
+            false
+        }
     }
 
     fun printUsers() = println("\nUsers: ${users.filterIsInstance<User>().joinToString(separator = ", ") { it.user }}")
