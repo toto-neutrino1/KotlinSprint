@@ -11,12 +11,12 @@ fun main() {
 
 fun printEatForAllAnimals(animals: List<Animal>) = animals.forEach { it.eat() }
 
-open class Animal(
+abstract class Animal(
     val name: String
 ) {
     fun play() = println("$name - играет")
     fun sleep() = println("$name - спит")
-    open fun eat() {}
+    abstract fun eat()
 }
 
 class Fox() : Animal(name = "лиса") {
