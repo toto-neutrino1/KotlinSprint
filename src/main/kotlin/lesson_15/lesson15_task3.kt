@@ -1,40 +1,63 @@
 package lesson_15
 
 fun main() {
-    val admins = MutableList(3) { Admin(it + 1, "admin${it + 1}") }
-    val users = MutableList(5) { User(it + 4, "user${it + 1}") }
-
     val forum = Forum()
-    forum.users.addAll(admins)
-    forum.users.addAll(users)
 
-    forum.users[2].writeMessage("Добро пожаловать на форум!", forum.messages)
-    forum.users[5].writeMessage("Привет!", forum.messages)
-    forum.users[4].writeMessage("Какие планы?", forum.messages)
-    forum.users[1].writeMessage("Учимся!", forum.messages)
-    forum.readMessages()
-
-    forum.deleteMessage(userId = 2, messageId = 3)
-    forum.readMessages()
+    forum.addUser(userId = 3, userName = "User1", isAdmin = false)
+    forum.addUser(userId = 4, userName = "User2", isAdmin = false)
+    forum.addUser(userId = 1, userName = "Admin4", isAdmin = true)
+    forum.addUser(userId = 2, userName = "User3", isAdmin = false)
+    forum.addUser(userId = 5, userName = "User4", isAdmin = false)
     forum.printUsers()
+    forum.printAdmins()
 
-    forum.deleteUser(userId = 5, deletingUserId = 6)
-    forum.deleteUser(userId = 3, deletingUserId = 6)
+    forum.addMessage(userId = 1, message = "Добро пожаловать на форум!")
+    forum.addMessage(userId = 4, message = "Привет!")
+    forum.addMessage(userId = 6, message = "Какие планы?")
+    forum.addMessage(userId = 3, message = "Учимся!")
+    forum.readMessages()
+
+    forum.deleteMessage(userId = 4, messageId = 1)
+    forum.deleteMessage(userId = 2, messageId = 1)
+    forum.readMessages()
+
+    forum.deleteUser(userId = 7, deletingUserId = 1)
+    forum.deleteUser(userId = 2, deletingUserId = 6)
     forum.printUsers()
     forum.printAdmins()
 }
 
 class Forum(
-    val users: MutableList<BasicUser> = mutableListOf(),
-    val messages: MutableList<String> = mutableListOf()
+    private val users: MutableList<BasicUser> = MutableList(3) { Admin(it + 1, "admin${it + 1}") },
+    private val messages: MutableList<Message> = mutableListOf()
 ) {
-    fun readMessages() = users[0].readMessages(messages)
+    private val allUserIds: List<Int>
+        get() = users.map { it.id }
+
+    private val allMessageIds: List<Int>
+        get() = messages.map { it.id }
+
+    fun addUser(userId: Int, userName: String, isAdmin: Boolean) {
+        if (userId in allUserIds && users.find { it.id == userId } is Admin) {
+            if (!isAdmin) users.add(User(id = allUserIds.max() + 1, user = userName))
+            else users.add(Admin(id = allUserIds.max() + 1, admin = userName))
+        } else println("Добавление пользователя \"$userName\" невозможно!\n")
+    }
+
+    fun addMessage(userId: Int, message: String) {
+        if (userId in allUserIds) {
+            val addingId = if (allMessageIds.isNotEmpty()) allMessageIds.max() + 1 else 1
+            messages.add(Message(id = addingId, message = "${users.find { it.id == userId }!!.userType}: $message"))
+        } else println("Добавление сообщения невозможно!")
+    }
+
+    fun readMessages() = println(messages.joinToString(separator = "\n", postfix = "\n") { it.message })
 
     fun deleteMessage(userId: Int, messageId: Int): Boolean {
-        return if (userId in 1..users.size &&
-            messageId in 1..messages.size &&
-            users[userId - 1] is Admin) {
-            messages.removeAt(messageId - 1)
+        return if (userId in allUserIds &&
+            messageId in allMessageIds &&
+            users.find { it.id == userId } is Admin) {
+            messages.removeIf { it.id == messageId }
             true
         } else {
             println("Попытка удаления сообщения с id = $messageId пользователем с id = $userId неудачна!\n")
@@ -43,9 +66,11 @@ class Forum(
     }
 
     fun deleteUser(userId: Int, deletingUserId: Int): Boolean {
-        return if (userId in 1..users.size &&
-            deletingUserId in 1..users.size &&
-            users[userId - 1] is Admin) {
+        return if (
+            userId in allUserIds &&
+            deletingUserId in allUserIds &&
+            users.find { it.id == userId } is Admin
+            ) {
             users.removeIf { it.id == deletingUserId }
             true
         } else {
@@ -54,30 +79,15 @@ class Forum(
         }
     }
 
-    fun printUsers() = println("\nUsers: ${users.filterIsInstance<User>().joinToString(separator = ", ") { it.user }}")
+    fun printUsers() = println("\nUsers: ${users.filterIsInstance<User>().joinToString(separator = ", ") { it.userType }}\n")
 
-    fun printAdmins() = println("Admins: ${users.filterIsInstance<Admin>().joinToString(separator = ", ") { it.admin }}")
+    fun printAdmins() = println("Admins: ${users.filterIsInstance<Admin>().joinToString(separator = ", ") { it.userType }}\n")
 }
 
-class Admin(
-    id: Int,
-    val admin: String
-) : BasicUser(id) {
-    override fun writeMessage(message: String, messages: MutableList<String>) {
-        messages.add("$admin: $message")
-    }
-}
+class Message(val id: Int, val message: String)
 
-class User(
-    id: Int,
-    val user: String
-) : BasicUser(id) {
-    override fun writeMessage(message: String, messages: MutableList<String>) {
-        messages.add("$user: $message")
-    }
-}
+class Admin(id: Int, admin: String) : BasicUser(id = id, userType = admin)
 
-abstract class BasicUser(val id: Int) {
-    fun readMessages(messages: MutableList<String>) = println(messages.joinToString(separator = "\n", postfix = "\n"))
-    abstract fun writeMessage(message: String, messages: MutableList<String>)
-}
+class User(id: Int, user: String) : BasicUser(id = id, userType = user)
+
+abstract class BasicUser(val id: Int, val userType: String)
