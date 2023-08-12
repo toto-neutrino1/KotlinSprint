@@ -10,6 +10,10 @@ class Spaceship {
     fun takeOff() {
         println("Нужна дополнительная информация для метода takeOff()\n")
     }
-    fun toLand() {TODO()}
+
+    fun toLand() {
+        TODO()
+    }
+
     fun shootOffFromAsteroid() {}
 }
