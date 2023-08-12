@@ -19,7 +19,13 @@ class FileCard(
 
     fun addHumanToFileCard() {
         println("Введите имя и пол (м/ж):")
-        val humanData = readln().split(" ")
+        var humanData = readln().split(" ")
+
+        while (humanData.size != 2 || humanData[1].lowercase() !in listOf("м", "ж")) {
+            println("Некорректный формат ввода!")
+            println("Введите имя и пол (м/ж):")
+            humanData = readln().split(" ")
+        }
 
         val sex = if (humanData[1].lowercase() == "м") Sex.MALE else Sex.FEMALE
 
