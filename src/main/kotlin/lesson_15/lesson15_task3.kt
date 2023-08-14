@@ -1,62 +1,82 @@
 package lesson_15
 
 fun main() {
-    val forum = Forum()
+    val forum = Forum(superAdminName = "BossAdmin")
+    forum.addMessage(userId = 0, message = "Добро пожаловать на форум!")
 
-    forum.addUser(userId = 3, userName = "User1", isAdmin = false)
-    forum.addUser(userId = 4, userName = "User2", isAdmin = false)
-    forum.addUser(userId = 1, userName = "Admin4", isAdmin = true)
-    forum.addUser(userId = 2, userName = "User3", isAdmin = false)
-    forum.addUser(userId = 5, userName = "User4", isAdmin = false)
+    val user1 = forum.addUser(userId = 0, userName = "User1", isAdmin = false)
+    user1?.let {
+        forum.addMessage(userId = it.id, message = "Привет всем!")
+    }
+
+    val user2 = forum.addUser(userId = 0, userName = "User2", isAdmin = false)
+    user2?.let {
+        forum.addMessage(userId = it.id, message = "Привет, я ${it.userName}")
+    }
+
+    val user3 = forum.addUser(userId = 4, userName = "User3", isAdmin = false) // null
+    user3?.let {
+        forum.addMessage(userId = it.id, message = "Я ${it.userName}")
+    }
+
+    val admin1 = forum.addUser(userId = 0, userName = "Admin1", isAdmin = true)
+    admin1?.let {
+        forum.addMessage(userId = it.id, message = "Я ${it.userName}")
+    }
+
+    forum.addUser(userId = 3, userName = "User4", isAdmin = false)
+    forum.addUser(userId = 0, userName = "User5", isAdmin = false)
     forum.printUsers()
     forum.printAdmins()
-
-    forum.addMessage(userId = 1, message = "Добро пожаловать на форум!")
-    forum.addMessage(userId = 4, message = "Привет!")
-    forum.addMessage(userId = 6, message = "Какие планы?")
-    forum.addMessage(userId = 3, message = "Учимся!")
     forum.readMessages()
 
     forum.deleteMessage(userId = 4, messageId = 1)
-    forum.deleteMessage(userId = 2, messageId = 1)
+    forum.deleteMessage(userId = 3, messageId = 2)
     forum.readMessages()
 
     forum.deleteUser(userId = 7, deletingUserId = 1)
-    forum.deleteUser(userId = 2, deletingUserId = 6)
+    forum.deleteUser(userId = 0, deletingUserId = 2)
     forum.printUsers()
     forum.printAdmins()
 }
 
-class Forum(
-    private val users: MutableList<BasicUser> = MutableList(3) { Admin(it + 1, "admin${it + 1}") },
+class Forum(superAdminName: String) {
+    private var lastUserId = 0
+    private var lastMessageId = 1
+    private val users: MutableList<BasicUser> = mutableListOf(Admin(id = lastUserId++, admin = superAdminName))
     private val messages: MutableList<Message> = mutableListOf()
-) {
-    private val allUserIds: List<Int>
-        get() = users.map { it.id }
 
-    private val allMessageIds: List<Int>
-        get() = messages.map { it.id }
-
-    fun addUser(userId: Int, userName: String, isAdmin: Boolean) {
-        if (userId in allUserIds && users.find { it.id == userId } is Admin) {
-            if (!isAdmin) users.add(User(id = allUserIds.max() + 1, user = userName))
-            else users.add(Admin(id = allUserIds.max() + 1, admin = userName))
-        } else println("Добавление пользователя \"$userName\" невозможно!\n")
+    fun addUser(userId: Int, userName: String, isAdmin: Boolean): BasicUser? {
+        return if (users.find { it.id == userId && it is Admin } != null) {
+            val newUser =
+                if (!isAdmin) User(id = lastUserId++, user = userName)
+                else Admin(id = lastUserId++, admin = userName)
+            users.add(newUser)
+            newUser
+        } else {
+            println("Добавление пользователя \"$userName\" невозможно!\n")
+            null
+        }
     }
 
-    fun addMessage(userId: Int, message: String) {
-        if (userId in allUserIds) {
-            val addingId = if (allMessageIds.isNotEmpty()) allMessageIds.max() + 1 else 1
-            messages.add(Message(id = addingId, message = "${users.find { it.id == userId }!!.userType}: $message"))
-        } else println("Добавление сообщения невозможно!")
+    fun addMessage(userId: Int, message: String): Message? {
+        val author = users.find { it.id == userId }
+        return if (author != null) {
+            val newMessage = Message(id = lastMessageId++, author = author, message = message)
+            messages.add(newMessage)
+            newMessage
+        } else {
+            println("Пользователя с id = $userId не существует!")
+            null
+        }
     }
 
-    fun readMessages() = println(messages.joinToString(separator = "\n", postfix = "\n") { it.message })
+    fun readMessages() = println(
+        messages.joinToString(separator = "\n", postfix = "\n") { "${it.author.userName}: ${it.message}" }
+    )
 
     fun deleteMessage(userId: Int, messageId: Int): Boolean {
-        return if (userId in allUserIds &&
-            messageId in allMessageIds &&
-            users.find { it.id == userId } is Admin) {
+        return if (users.find { it.id == userId } is Admin) {
             messages.removeIf { it.id == messageId }
             true
         } else {
@@ -66,11 +86,7 @@ class Forum(
     }
 
     fun deleteUser(userId: Int, deletingUserId: Int): Boolean {
-        return if (
-            userId in allUserIds &&
-            deletingUserId in allUserIds &&
-            users.find { it.id == userId } is Admin
-            ) {
+        return if (deletingUserId != 0 && users.find { it.id == userId } is Admin) {
             users.removeIf { it.id == deletingUserId }
             true
         } else {
@@ -79,15 +95,15 @@ class Forum(
         }
     }
 
-    fun printUsers() = println("\nUsers: ${users.filterIsInstance<User>().joinToString(separator = ", ") { it.userType }}\n")
+    fun printUsers() = println("\nUsers: ${users.filterIsInstance<User>().joinToString(separator = ", ") { it.userName }}\n")
 
-    fun printAdmins() = println("Admins: ${users.filterIsInstance<Admin>().joinToString(separator = ", ") { it.userType }}\n")
+    fun printAdmins() = println("Admins: ${users.filterIsInstance<Admin>().joinToString(separator = ", ") { it.userName }}\n")
 }
 
-class Message(val id: Int, val message: String)
+class Message(val id: Int, val author: BasicUser, val message: String)
 
-class Admin(id: Int, admin: String) : BasicUser(id = id, userType = admin)
+class Admin(id: Int, admin: String) : BasicUser(id = id, userName = admin)
 
-class User(id: Int, user: String) : BasicUser(id = id, userType = user)
+class User(id: Int, user: String) : BasicUser(id = id, userName = user)
 
-abstract class BasicUser(val id: Int, val userType: String)
+abstract class BasicUser(val id: Int, val userName: String)
